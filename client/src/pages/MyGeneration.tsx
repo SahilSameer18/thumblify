@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import SoftBackdrop from "../components/SoftBackdrop";
-import { dummyThumbnails, type IThumbnail } from "../assests/assets";
+import { type IThumbnail } from "../assests/assets";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowUpRightIcon, DownloadIcon, TrashIcon } from "lucide-react";
+import api from "../configs/api";
+import toast from "react-hot-toast";
+import { useAuth } from "../context/AuthContext";
 
 const MyGeneration = () => {
   const navigate = useNavigate();
+  const { isLoggedIn, loading: authLoading } = useAuth();
 
   const aspectRatioClassMap: Record<string, string> = {
     "16:9": "aspect-video",
@@ -16,9 +20,24 @@ const MyGeneration = () => {
   const [thumbnails, setThumbnails] = useState<IThumbnail[]>([]);
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if (!authLoading && !isLoggedIn) {
+      toast.error("Please login to view your generations.");
+      navigate("/login");
+    }
+  }, [authLoading, isLoggedIn, navigate]);
+
   const fetchThumbnails = async () => {
-    setThumbnails(dummyThumbnails as unknown as IThumbnail[]);
-    setLoading(false);
+    setLoading(true);
+    try {
+      const { data } = await api.get("/api/user/thumbnails");
+      setThumbnails(data);
+    } catch (error: any) {
+      console.error(error);
+      toast.error("Failed to load thumbnails.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDownload = (image_url: string) => {
@@ -26,12 +45,22 @@ const MyGeneration = () => {
   };
 
   const handleDelete = async (id: string) => {
-    console.log(id);
+    try {
+      const { data } = await api.delete(`/api/thumbnail/delete/${id}`);
+      setThumbnails((prev) => prev.filter((thumb) => thumb._id !== id));
+      toast.success(data.message || "Thumbnail deleted successfully.");
+    } catch (error: any) {
+      console.error(error);
+      const errMsg = error.response?.data?.message || "Failed to delete thumbnail.";
+      toast.error(errMsg);
+    }
   };
 
   useEffect(() => {
-    fetchThumbnails();
-  }, []);
+    if (isLoggedIn) {
+      fetchThumbnails();
+    }
+  }, [isLoggedIn]);
 
   return (
     <>
@@ -47,25 +76,25 @@ const MyGeneration = () => {
 
         {/* Loading */}
         {loading && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 l:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {Array.from({ length: 6 }).map((_, i) => (
               <div
                 key={i}
-                className="rounded-2xl bg--white/6 border border-white/10 animate-pulse h-[260px]"
+                className="rounded-2xl bg-white/6 border border-white/10 animate-pulse h-[260px]"
               />
             ))}
+          </div>
+        )}
 
-            {/* Empty State */}
-            {!loading && thumbnails.length === 0 && (
-              <div className="text-center py-24">
-                <h3 className="text-lg font-semibold text-zinc-200">
-                  No thumbnails yet
-                </h3>
-                <p className="text-sm text-zinc-400 mt-2">
-                  Generate your first thumbnail to see it here
-                </p>
-              </div>
-            )}
+        {/* Empty State */}
+        {!loading && thumbnails.length === 0 && (
+          <div className="text-center py-24">
+            <h3 className="text-lg font-semibold text-zinc-200">
+              No thumbnails yet
+            </h3>
+            <p className="text-sm text-zinc-400 mt-2">
+              Generate your first thumbnail to see it here
+            </p>
           </div>
         )}
 

@@ -51,11 +51,11 @@ export default function Navbar() {
 
         <div className="flex items-center gap-2">
           {isLoggedIn ? (
-            <div className="relative-group">
+            <div className="relative group">
               <button className="rounded-full size-8 bg-white/20 border-2 border-white/10">
                 {user?.name.charAt(0).toUpperCase()}
               </button>
-              <div className="absolute hiddengroup-hover:black top-6 right-0 pt-4">
+              <div className="absolute hidden group-hover:block top-6 right-0 pt-4">
                 <button
                   onClick={() => logout()}
                   className="bg-white/20 border-2 border-white/10 px-5 py-1.5 rounded"
@@ -105,7 +105,7 @@ export default function Navbar() {
           <button
             onClick={() => {
               setIsOpen(false);
-              logout;
+              logout();
             }}
           >
             Logout

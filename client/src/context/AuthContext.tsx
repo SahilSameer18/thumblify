@@ -15,6 +15,7 @@ interface AuthContextProps {
     password: string;
   }) => Promise<void>;
   logout: () => Promise<void>;
+  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextProps>({
@@ -25,11 +26,13 @@ const AuthContext = createContext<AuthContextProps>({
   login: async () => {},
   signUp: async () => {},
   logout: async () => {},
+  loading: true,
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<IUser | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const signUp = async ({
     name,
@@ -51,8 +54,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setIsLoggedIn(true);
       }
       toast.success(data.message);
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
+      const errMsg = error.response?.data?.message || "Registration failed";
+      toast.error(errMsg);
     }
   };
 
@@ -70,8 +75,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setIsLoggedIn(true);
       }
       toast.success(data.message);
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
+      const errMsg = error.response?.data?.message || "Login failed";
+      toast.error(errMsg);
     }
   };
 
@@ -81,20 +88,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setUser(null);
       setIsLoggedIn(false);
       toast.success(data.message);
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
+      const errMsg = error.response?.data?.message || "Logout failed";
+      toast.error(errMsg);
     }
   };
 
   const fetchUser = async () => {
     try {
       const { data } = await api.get("/api/auth/verify");
-      if (data.user as IUser) {
-        setUser(null);
+      if (data.user) {
+        setUser(data.user as IUser);
         setIsLoggedIn(true);
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -112,6 +123,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     signUp,
     login,
     logout,
+    loading,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
