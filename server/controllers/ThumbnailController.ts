@@ -26,6 +26,8 @@ const colorSchemeDescriptions = {
 }
 
 export const generateThumbnail = async (req: Request, res: Response) => {
+  let thumbnail: any = null;
+  let filePath: string | null = null;
   try {
     const { userId } = req.session;
     const {
@@ -37,7 +39,7 @@ export const generateThumbnail = async (req: Request, res: Response) => {
       text_overlay,
     } = req.body;
 
-    const thumbnail = await Thumbnail.create({
+    thumbnail = await Thumbnail.create({
       userId,
       title,
       prompt_used: user_prompt,
@@ -109,12 +111,12 @@ export const generateThumbnail = async (req: Request, res: Response) => {
 
     for(const part of parts){
       if(part.inlineData){
-        finalBuffer = Buffer.from(part.inlineData,'base64')
+        finalBuffer = Buffer.from(part.inlineData.data,'base64')
       }
     }
 
     const filename = `final-output-${Date.now()}.png`;
-    const filePath = path.join('images', filename);
+    filePath = path.join('images', filename);
 
     // create the  images directory if it doesn't exist
 
@@ -134,9 +136,20 @@ export const generateThumbnail = async (req: Request, res: Response) => {
 
     //remove image file from disc
     fs.unlinkSync(filePath)
+    filePath = null;
 
   } catch (error: any) {
     console.log(error);
+    if (filePath && fs.existsSync(filePath)) {
+      try {
+        fs.unlinkSync(filePath);
+      } catch (err) {
+        console.error("Failed to delete local file:", err);
+      }
+    }
+    if (thumbnail) {
+      await Thumbnail.findByIdAndDelete(thumbnail._id);
+    }
     res.status(500).json({message: error.message});
   }
 };
@@ -148,7 +161,7 @@ export const deleteThumbnail = async (req: Request, res: Response) => {
     const {id} = req.params;
     const {userId} = req.session;
 
-    await Thumbnail.findByIdAndDelete({_id: id, userId})
+    await Thumbnail.findOneAndDelete({_id: id, userId})
 
     res.json({message: 'Thumbnail deleted successfully'})
     

@@ -37,7 +37,7 @@ const styleIcons: Record<ThumbnailStyle, React.ReactNode> = {
         <p className="text-xs text-zinc-400">{styleDescriptions[value]}</p>
 
       </div>
-      <ChevronDownIcon className={['h-5 w-5 text-zinc-400 transition-transform', isOpen && 'rotate-180'].join('')}/>
+      <ChevronDownIcon className={`h-5 w-5 text-zinc-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}/>
     </button>
 
     {isOpen && (
