@@ -7,243 +7,172 @@
 
 Thumblify is an AI-powered thumbnail generator that helps content creators, YouTubers, and marketers create eye-catching video thumbnails in seconds. Using advanced Google Gemini AI, Thumblify analyzes your video content and generates high-converting thumbnails with professional designs.
 
-![Thumblify Preview](https://via.placeholder.com/800x400/1a1a1a/ffffff?text=Thumblify+AI+Thumbnail+Generator)
-
 ## ✨ Features
 
 - **AI-Powered Generation**: Leverage Google Gemini 2.5 Flash Image model for stunning thumbnail creation
 - **Multiple Styles**: Choose from Bold & Graphic, Tech/Futuristic, Minimalist, Photorealistic, and Illustration styles
-- **Color Schemes**: 8+ predefined color palettes including vibrant, sunset, forest, neon, and more
-- **Flexible Aspect Ratios**: Support for 16:9, 1:1, 9:16, and custom ratios
-- **Smart Analysis**: AI analyzes video content to suggest optimal thumbnail concepts
-- **High CTR Designs**: Templates optimized for maximum click-through rates
+- **Color Schemes**: 8 predefined color palettes including vibrant, sunset, forest, neon, and more
+- **Flexible Aspect Ratios**: Support for 16:9, 1:1, and 9:16
+- **YouTube Preview**: See how your thumbnail looks in a real YouTube feed
 - **Cloud Storage**: Secure image storage with Cloudinary integration
-- **User Authentication**: Secure user accounts with session management
+- **User Authentication**: Session-based auth with MongoDB persistent sessions
 - **Responsive Design**: Modern, mobile-friendly interface built with React and Tailwind CSS
 - **Real-time Preview**: Instant preview of generated thumbnails
-- **Pricing Tiers**: Basic, Pro, and Enterprise plans with different feature sets
+- **My Generations**: Manage, download, and delete all your past thumbnails
 
 ## 🚀 Tech Stack
 
 ### Frontend
-- **React 19** - Modern React with hooks and concurrent features
-- **TypeScript** - Type-safe JavaScript
-- **Vite** - Fast build tool and development server
-- **Tailwind CSS** - Utility-first CSS framework
-- **React Router** - Client-side routing
-- **Motion** - Animation library for smooth interactions
-- **Lenis** - Smooth scrolling library
-- **Axios** - HTTP client for API calls
-- **Lucide React** - Beautiful icon library
+- **React 19** — Modern React with hooks
+- **TypeScript** — Type-safe JavaScript
+- **Vite** — Fast build tool and dev server
+- **Tailwind CSS v4** — Utility-first CSS
+- **React Router v7** — Client-side routing
+- **Motion** — Animation library
+- **Lenis** — Smooth scrolling
+- **Axios** — HTTP client
+- **Lucide React** — Icon library
+- **React Hot Toast** — Toast notifications
 
 ### Backend
-- **Node.js** - JavaScript runtime
-- **Express.js** - Web framework
-- **TypeScript** - Type-safe backend code
-- **MongoDB** - NoSQL database with Mongoose ODM
-- **Google Gemini AI** - AI image generation
-- **Cloudinary** - Image storage and optimization
-- **Express Session** - Session management
-- **bcrypt** - Password hashing
-- **CORS** - Cross-origin resource sharing
+- **Node.js + Express.js** — Web server
+- **TypeScript** — Type-safe backend
+- **MongoDB + Mongoose** — Database with ODM
+- **Google Gemini AI (`@google/genai`)** — AI image generation
+- **Cloudinary** — Image storage and CDN
+- **Express Session + connect-mongo** — Session management
+- **bcrypt** — Password hashing
 
 ## 📋 Prerequisites
 
-Before running this application, make sure you have the following installed:
-
-- **Node.js** (v18 or higher)
-- **npm** or **yarn** package manager
-- **MongoDB** database (local or cloud instance)
-- **Google AI API Key** (for Gemini AI)
-- **Cloudinary Account** (for image storage)
+- **Node.js** v18+
+- **npm** package manager
+- **MongoDB Atlas** account (or local MongoDB)
+- **Google AI API Key** — from [Google AI Studio](https://aistudio.google.com/)
+- **Cloudinary Account** — for image storage
 
 ## 🛠️ Installation
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/thumblify.git
-   cd thumblify
-   ```
+### 1. Clone the repository
+```bash
+git clone https://github.com/SahilSameer18/thumblify.git
+cd thumblify
+```
 
-2. **Install client dependencies**
-   ```bash
-   cd client
-   npm install
-   ```
+### 2. Install server dependencies
+```bash
+cd server
+npm install
+```
 
-3. **Install server dependencies**
-   ```bash
-   cd ../server
-   npm install
-   ```
+### 3. Install client dependencies
+```bash
+cd ../client
+npm install
+```
 
-4. **Environment Setup**
+### 4. Environment Setup
 
-   Create `.env` file in the `server` directory:
-   ```env
-   PORT=3000
-   MONGODB_URI=mongodb://localhost:27017/thumblify
-   SESSION_SECRET=your-super-secret-session-key
-   GOOGLE_AI_API_KEY=your-google-ai-api-key
-   CLOUDINARY_CLOUD_NAME=your-cloudinary-cloud-name
-   CLOUDINARY_API_KEY=your-cloudinary-api-key
-   CLOUDINARY_API_SECRET=your-cloudinary-api-secret
-   ```
+Create a `.env` file in the `server/` directory:
+```env
+PORT=3000
+MONGODB_URI=mongodb+srv://<user>:<password>@cluster0.xxxxx.mongodb.net/thumblify
+SESSION_SECRET=your-super-secret-session-key
+GEMINI_API_KEY=your-google-ai-api-key
+CLOUDINARY_URL=cloudinary://api_key:api_secret@cloud_name
+```
 
-5. **Start the development servers**
+Create a `.env` file in the `client/` directory:
+```env
+VITE_BASE_URL=http://localhost:3000
+```
 
-   **Terminal 1 - Start the backend server:**
-   ```bash
-   cd server
-   npm run server
-   ```
+### 5. Start development servers
 
-   **Terminal 2 - Start the frontend client:**
-   ```bash
-   cd client
-   npm run dev
-   ```
+**Terminal 1 — Backend:**
+```bash
+cd server
+npm run server
+```
 
-6. **Access the application**
+**Terminal 2 — Frontend:**
+```bash
+cd client
+npm run dev
+```
 
-   Open your browser and navigate to `http://localhost:5173`
+### 6. Open in browser
+Navigate to `http://localhost:5173`
 
 ## 📖 Usage
 
-### For Content Creators
-
-1. **Sign Up/Login**: Create an account or log in to access the thumbnail generator
-2. **Enter Video Details**: Provide your video title and any additional context
+1. **Sign Up / Login** — Create an account to access the generator
+2. **Enter Video Title** — Type your video topic or title
 3. **Customize Options**:
-   - Select aspect ratio (16:9, 1:1, 9:16)
-   - Choose a style (Bold & Graphic, Minimalist, etc.)
-   - Pick a color scheme
-   - Add custom prompts for specific requirements
-4. **Generate**: Click generate and watch AI create your thumbnail
-5. **Download/Edit**: Download the thumbnail or make further edits
-
-### API Usage (Enterprise)
-
-For enterprise users, Thumblify provides API access for programmatic thumbnail generation:
-
-```javascript
-// Example API call
-const response = await fetch('/api/thumbnails/generate', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer your-api-token'
-  },
-  body: JSON.stringify({
-    title: 'My Amazing Video',
-    style: 'Bold & Graphic',
-    aspect_ratio: '16:9',
-    color_scheme: 'vibrant'
-  })
-});
-```
+   - Aspect Ratio: 16:9, 1:1, or 9:16
+   - Style: Bold & Graphic, Minimalist, Photorealistic, Illustrated, Tech/Futuristic
+   - Color Scheme: Vibrant, Sunset, Ocean, Forest, Purple, Monochrome, Neon, Pastel
+   - Additional Prompts: extra context for the AI
+4. **Generate** — Click Generate and wait ~15–30 seconds for AI to create your thumbnail
+5. **Preview** — See how it looks in a YouTube feed via the YouTube Preview
+6. **Download** — Download the thumbnail directly from the preview
 
 ## 🏗️ Project Structure
 
 ```
 thumblify/
-├── client/                 # React frontend
-│   ├── public/
-│   ├── src/
-│   │   ├── components/     # Reusable UI components
-│   │   ├── pages/          # Page components
-│   │   ├── sections/       # Landing page sections
-│   │   ├── data/           # Static data files
-│   │   ├── configs/        # API configuration
-│   │   └── assets/         # Static assets
-│   ├── package.json
-│   └── vite.config.ts
-├── server/                 # Node.js backend
-│   ├── controllers/        # Route controllers
-│   ├── models/             # MongoDB models
-│   ├── routes/             # API routes
-│   ├── middlewares/        # Custom middlewares
-│   ├── configs/            # Database and AI configs
-│   ├── package.json
-│   └── server.ts
-└── README.md
+├── client/                  # React frontend (Vite + TypeScript)
+│   └── src/
+│       ├── components/      # Reusable UI components
+│       ├── pages/           # Generate, MyGeneration, YtPreview, HomePage
+│       ├── sections/        # Landing page sections
+│       ├── context/         # Auth context (session-based)
+│       ├── configs/         # Axios API config
+│       ├── data/            # Static data
+│       └── assests/         # Images and type definitions
+└── server/                  # Express backend (TypeScript)
+    ├── controllers/         # Auth, Thumbnail, User controllers
+    ├── models/              # Mongoose models (User, Thumbnail)
+    ├── routes/              # Auth, Thumbnail, User routes
+    ├── middlewares/         # Auth protect middleware
+    ├── configs/             # DB, AI, Cloudinary configs
+    └── server.ts            # Entry point
 ```
 
 ## 🎯 API Endpoints
 
-### Authentication
-- `POST /api/auth/register` - User registration
-- `POST /api/auth/login` - User login
-- `POST /api/auth/logout` - User logout
+### Auth
+| Method | Route | Description |
+|--------|-------|-------------|
+| POST | `/api/auth/register` | Register new user |
+| POST | `/api/auth/login` | Login user |
+| POST | `/api/auth/logout` | Logout user |
+| GET  | `/api/auth/verify` | Verify session / get current user |
 
 ### Thumbnails
-- `POST /api/thumbnails/generate` - Generate new thumbnail
-- `GET /api/thumbnails/:id` - Get thumbnail by ID
-- `GET /api/thumbnails/user/:userId` - Get user's thumbnails
+| Method | Route | Description |
+|--------|-------|-------------|
+| POST   | `/api/thumbnail/generate` | Generate a new AI thumbnail |
+| DELETE | `/api/thumbnail/delete/:id` | Delete a thumbnail |
 
-### User Management
-- `GET /api/users/profile` - Get user profile
-- `PUT /api/users/profile` - Update user profile
+### User
+| Method | Route | Description |
+|--------|-------|-------------|
+| GET | `/api/user/thumbnails` | Get all thumbnails for logged-in user |
+| GET | `/api/user/thumbnails/:id` | Get a single thumbnail by ID |
 
 ## 💰 Pricing
 
-### Basic Plan ($29/month)
-- 20 AI Thumbnails per month
-- Basic Templates
-- Standard Resolution
-- Email Support
-
-### Pro Plan ($79/month) - Most Popular
-- Unlimited AI Thumbnails
-- Premium Templates
-- 4K Resolution
-- A/B Testing Tools
-- Priority Support
-- Custom Fonts
-- Brand Kit Analysis
-
-### Enterprise Plan ($199/month)
-- Everything in Pro
-- API Access
-- Team Collaboration
-- Custom Branding
-- Dedicated Account Manager
-
-## 🤝 Contributing
-
-We welcome contributions! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-### Development Guidelines
-- Use TypeScript for type safety
-- Follow ESLint configuration
-- Write meaningful commit messages
-- Test your changes thoroughly
-- Update documentation as needed
+| Plan | Price | Thumbnails | Resolution |
+|------|-------|------------|------------|
+| Basic | $29/mo | 20/month | Standard |
+| Pro ⭐ | $79/mo | Unlimited | 4K |
+| Enterprise | $199/mo | Unlimited | 4K + API |
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- **Google Gemini AI** for powering the image generation
-- **Cloudinary** for reliable image storage
-- **Tailwind CSS** for the beautiful UI components
-- **React Community** for the amazing ecosystem
-
-## 📞 Support
-
-- **Email**: support@thumblify.com
-- **Documentation**: [docs.thumblify.com](https://docs.thumblify.com)
-- **Discord**: [Join our community](https://discord.gg/thumblify)
+This project is licensed under the MIT License.
 
 ---
 
-**Made with ❤️ by the Thumblify team**</content>
-<parameter name="filePath">c:\Users\HP\Desktop\thumblify\README.md
+**Made with ❤️ by the Sahil Sameer**
