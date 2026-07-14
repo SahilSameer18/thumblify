@@ -20,6 +20,35 @@ Thumblify is an AI-powered thumbnail generator that helps content creators, YouT
 - **Real-time Preview**: Instant preview of generated thumbnails
 - **My Generations**: Manage, download, and delete all your past thumbnails
 
+## 📐 System Architecture
+
+```mermaid
+graph TD
+    %% Define Styles
+    classDef client fill:#3b82f6,stroke:#2563eb,stroke-width:2px,color:#fff;
+    classDef backend fill:#10b981,stroke:#059669,stroke-width:2px,color:#fff;
+    classDef database fill:#f59e0b,stroke:#d97706,stroke-width:2px,color:#fff;
+    classDef external fill:#8b5cf6,stroke:#7c3aed,stroke-width:2px,color:#fff;
+
+    User((👤 User)) -->|Interacts with UI| Client[💻 React Frontend]:::client
+    
+    Client -->|REST API Requests| Server[⚙️ Express Backend]:::backend
+    
+    subgraph Server-Side [Server Infrastructure]
+        Server -->|Session cookies| Session[(Session Store)]:::database
+        Server -->|Auth & MetaData| DB[(MongoDB)]:::database
+        
+        Server -->|Construct prompt| Gemini{🤖 Google Gemini AI}:::external
+        Gemini -.->|Returns Base64 image| Server
+        
+        Server -->|Temporary save| FS[📁 Local FS]:::backend
+        FS -->|Upload image| Cloudinary[☁️ Cloudinary CDN]:::external
+        Cloudinary -.->|Returns image URL| Server
+    end
+    
+    Cloudinary -.->|Serves images| Client
+```
+
 ## 🚀 Tech Stack
 
 ### Frontend
@@ -175,4 +204,4 @@ This project is licensed under the MIT License.
 
 ---
 
-**Made with ❤️ by the Sahil Sameer**
+**Made with ❤️ by Sahil Sameer**
